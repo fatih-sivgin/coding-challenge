@@ -1,0 +1,505 @@
+openapi: 3.0.3
+info:
+  title: Training API - OpenAPI 3.0
+  description: |-
+    This is the Training API for based on the OpenAPI 3.0 specification.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/v1/trainings:
+    get:
+      tags:
+        - training
+      summary: obtain trainings
+      description: get an overview of all trainings
+      operationId: getTrainings
+      parameters:
+        - name: page    # ?page=0
+          in: query
+          description: the pagenumber, if invalid will be ignored
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size    # ?size=10
+          in: query
+          description: the size of elements, if invalid will be ignored
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: beginDate    # ?beginDate=2025-09-14
+          in: query
+          description: first part of timespan in YYYY-MM-DD, if beginDate or endDate is not set well will be ignored
+          required: false
+          schema:
+            type: string
+            example: "2025-09-14"
+        - name: endDate    # ?endDate=2025-09-20
+          in: query
+          description: second part of timespan in YYYY-MM-DD, if beginDate or endDate is not set well will be ignored
+          required: false
+          schema:
+            type: string
+            example: "2025-09-20"
+        - name: includeAppointments    # ?includeAppointments=true
+          in: query
+          description: wheather appointments should be part of the response
+          required: false
+          schema:
+            type: boolean
+            example: "false"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalElements:
+                    type: integer
+                  trainings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TrainingResource'
+        '400':
+          description: Validation errors on beginDate or endDate, e.g. '2025-04-31'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParameterError'
+      security: []      # no security for getting trainings
+
+    post:
+      tags:
+        - training
+      summary: create a new training
+      description: create a new training with all owning properties also without appointments
+      operationId: postTraining
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTraining'
+            example:
+              description: "Design Patterns"
+              price: 49.99
+              speaker: "Mr. Chuck Norris"
+      responses:
+        '201':
+          description: Successfully created training
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingResource'
+        '400':
+          description: Validation errors on required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      security:
+        - bearer-auth: []
+
+  /api/v1/trainings/{id}:
+    put:
+      tags:
+        - training
+      summary: update an existing training
+      description: update an existing training with all owning properties
+      operationId: putTraining
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id of training
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440000"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTraining'
+            example:
+              id: "865e9e6b-4b38-4f95-97f6-f00dbdfcb137"
+              description: "Design Patterns"
+              price: 49.99
+              speaker: "Chuck Norris"
+      responses:
+        '200':
+          description: Successfully updated training
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainingResource'
+        '400':
+          description: Validation errors on required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      security:
+        - bearer-auth: []
+
+  /api/v1/appointments:
+    post:
+      tags:
+        - appointment
+      summary: create an appointment
+      description: create an appointment with linking to a training
+      operationId: postAppointment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAppointment'
+            example:
+              beginDate: "2025-09-14"
+              endDate: "2025-09-19"
+              trainingId: "865e9e6b-4b38-4f95-97f6-f00dbdfcb137"
+      responses:
+        '201':
+          description: Successfully created appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResource'
+        '400':
+          description: Validation errors on required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      security:
+        - bearer-auth: []
+
+
+  /api/v1/appointments/{id}:
+    put:
+      tags:
+        - appointment
+      summary: update an existing training
+      description: update an existing appointment with all owning properties
+      operationId: putAppointment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id of appointment
+          schema:
+            type: string
+            format: uuid
+            example: "599eb797-3c51-4fb5-98ab-2ea528ecae6d"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAppointment'
+            example:
+              id: "599eb797-3c51-4fb5-98ab-2ea528ecae6d"
+              beginDate: "2025-09-14"
+              endDate: "2025-09-19"
+              trainingId: "fc212da7-670e-4796-bf23-7f22c24970b7"
+      responses:
+        '200':
+          description: Successfully updated appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentResource'
+        '400':
+          description: Validation errors on required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+      security:
+        - bearer-auth: []
+
+
+
+  /api/v1/bookings:
+    post:
+      tags:
+        - booking
+      summary: book a training
+      description: book a training via appointment for a participant
+      operationId: postBooking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBooking'
+            example:
+              appointmentId: "599eb797-3c51-4fb5-98ab-2ea528ecae6d"
+              participant: "sivgin@gmail.com"
+      responses:
+        '200':
+          description: Successfully created booking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResource'
+        '400':
+          description: Validation errors on required fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+components:
+  schemas:
+
+    BookingResource:
+      description: Representation of a booking
+      type: object
+      required:
+        - id
+        - appointmentId
+        - participant
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "642d62cf-7081-48b4-ba5f-446230898020"
+        appointmentId:
+          type: string
+          format: uuid
+          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
+        participant:
+          type: string
+          example: "sivgin@gmail.com" # use here email only as identifier for a participant
+
+
+    CreateBooking:
+      description: resource to create a booking
+      type: object
+      required:
+        - appointmentId
+        - participant
+      properties:
+        appointmentId:
+          type: string
+          format: uuid
+          example: 2660cb62-1521-44da-8b75-30afdff91241"
+        participant:
+          type: string
+          example: "sivgin@gmail.com"
+
+    AppointmentResource:
+      description: Representation of an appointment
+      type: object
+      required:
+        - id
+        - beginDate
+        - endDate
+        - trainingId
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
+        beginDate:
+          type: string
+          format: date
+          description: Begindate of the appointment
+          example: "2025-09-14"
+        endDate:
+          type: string
+          format: date
+          description: Enddate of the appointment (inclusive)
+          example: "2025-09-14"
+        trainingId:
+          type: string
+          format: uuid
+          example: "c36c0219-7bc7-4048-b9de-25cf565b7586"
+        numberOfParticipants:
+          type: integer
+          default: 10
+          description: Number of allowed participants, cannot be changed after creation
+
+    CreateAppointment:
+      description: resource to create an appointment
+      type: object
+      required:
+        - beginDate
+        - endDate
+        - trainingId
+      properties:
+        beginDate:
+          type: string
+          example: "2025-09-14"
+        endDate:
+          type: string
+          example: "2025-09-19"
+        trainingId:
+          type: string
+          example: "fc212da7-670e-4796-bf23-7f22c24970b7"
+        numberOfParticipants:
+          type: integer
+          example: 5
+          default: 10
+          description: Number of allowed participants, cannot be changed afterwards
+
+    UpdateAppointment:
+      description: resource to update an appointment
+      type: object
+      required:
+        - id
+        - beginDate
+        - endDate
+        - trainingId
+      properties:
+        id:
+          type: string
+          example: "2b87b996-1624-4ed6-9524-85a6eaa61b21"
+        beginDate:
+          type: string
+          example: "2025-09-14"
+        endDate:
+          type: string
+          example: "2025-09-19"
+        trainingId:
+          type: string
+          example: "fc212da7-670e-4796-bf23-7f22c24970b7"
+
+    TrainingResource:
+      description: Representation of a training
+      type: object
+      required:
+        - id
+        - description
+        - price
+        - speaker
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
+        description:
+          type: string
+          example: "Design Patterns in Java"
+        price:
+          type: number
+          format: float
+          example: 99.50
+          description: Price in Euro
+        speaker:
+          type: string
+        appointments:
+          type: array
+          description: List of appointments can be optional
+          items:
+            $ref: '#/components/schemas/AppointmentResource'
+
+    CreateTraining:
+      description: resource to create a training
+      type: object
+      required:
+        - description
+        - price
+        - speaker
+      properties:
+        description:
+          type: string
+          example: "Java Basics"
+        price:
+          type: number
+          format: float
+          example: 49.99
+        speaker:
+          type: string
+          example: "Mr. Chuck Norris"
+
+    UpdateTraining:
+      description: resource to update an exisising training
+      type: object
+      required:
+        - id
+        - description
+        - price
+        - speaker
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
+        description:
+          type: string
+          example: "Java Basics"
+        price:
+          type: number
+          format: float
+          example: 49.99
+        speaker:
+          type: string
+          example: "Mr. Chuck Norris"
+
+    ParameterError:
+      description: query or path-parameter error resource
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: "2025-09-14T12:34:56.789+00:00"
+        status:
+          type: integer
+          description: the status code, always 400
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        path:
+          type: string
+          example: "/api/v1/trainings"
+
+    ValidationError:
+      description: validation error on fields of a specific resource
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: "2025-09-14T12:34:56.789+00:00"
+        status:
+          type: integer
+          description: the status code, always 400
+          example: 400
+        errors:
+          type: array
+          description: list of validation errors
+          items:
+            $ref: '#/components/schemas/FieldError'
+
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Name of invalid field
+          example: "description"
+        defaultMessage:
+          type: string
+          description: Validation error message
+          example: "must not be null"
+        rejectedValue:
+          type: string
+          nullable: true
+          description: the rejected value
+          example: null
+
+  securitySchemes:
+    bearer-auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
