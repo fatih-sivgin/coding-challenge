@@ -8,7 +8,6 @@ Here is a short description of the project.
 - You need to setup java-21
 - You need maven 3.6.3 at least
 
-
 ## Test
 
 Test the application, so let the unit test and integration tests run.
@@ -25,6 +24,14 @@ Start the application
 mvn -U clean package
 java -jar  ./target/*-SNAPSHOT.jar
 ```
+
+
+## Open topics
+
+- Convert entities to persistable entities
+- Create spring-data repositories for each entity
+- Configure application to let hibernate create db on startup
+- Setup global exception handling for bad requests to match to the given api specification
 
 
 ## Links

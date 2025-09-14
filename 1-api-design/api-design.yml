@@ -64,12 +64,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/TrainingResource'
-        '400':
-          description: Validation errors on beginDate or endDate, e.g. '2025-04-31'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ParameterError'
       security: []      # no security for getting trainings
 
     post:
@@ -224,8 +218,6 @@ paths:
       security:
         - bearer-auth: []
 
-
-
   /api/v1/bookings:
     post:
       tags:
@@ -307,7 +299,7 @@ components:
         id:
           type: string
           format: uuid
-          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
+          example: "96631b24-8807-4242-a941-f18ff37dc816"
         beginDate:
           type: string
           format: date
@@ -321,7 +313,7 @@ components:
         trainingId:
           type: string
           format: uuid
-          example: "c36c0219-7bc7-4048-b9de-25cf565b7586"
+          example: "29e20f20-3fe0-4401-b109-8972f489aa17"
         numberOfParticipants:
           type: integer
           default: 10
@@ -443,25 +435,6 @@ components:
         speaker:
           type: string
           example: "Mr. Chuck Norris"
-
-    ParameterError:
-      description: query or path-parameter error resource
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date
-          example: "2025-09-14T12:34:56.789+00:00"
-        status:
-          type: integer
-          description: the status code, always 400
-          example: 400
-        error:
-          type: string
-          example: "Bad Request"
-        path:
-          type: string
-          example: "/api/v1/trainings"
 
     ValidationError:
       description: validation error on fields of a specific resource
