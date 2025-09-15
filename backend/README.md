@@ -10,10 +10,10 @@ Here is a short description of the project.
 
 ## Test
 
-Test the application, so let the unit test and integration tests run.
+Test the application.
 
 ```shell
-mvn -U clean verify
+mvn -U clean package
 ```
 
 ## Run
@@ -32,6 +32,7 @@ java -jar  ./target/*-SNAPSHOT.jar
 - Create spring-data repositories for each entity
 - Configure application to let hibernate create db on startup
 - Setup global exception handling for bad requests to match to the given api specification
+- Setup security with an authorization-service providing JWT
 
 
 ## Links
