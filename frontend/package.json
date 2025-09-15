@@ -1,0 +1,22 @@
+{
+  "name": "vue-trainings-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "vite": "^5.0.0"
+  },
+  "description": "<!-- Simple Vue 3 application (Vite) to load Trainings from an API. Files are provided below. To run: 1. npm init @vitejs/app my-app -- --template vue 2. Replace files with the ones below or copy them into src/ 3. npm install 4. npm run dev",
+  "main": "index.html",
+  "author": "",
+  "license": "ISC"
+}
