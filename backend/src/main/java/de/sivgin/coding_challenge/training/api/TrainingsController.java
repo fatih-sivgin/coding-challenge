@@ -5,7 +5,7 @@
  */
 package de.sivgin.coding_challenge.training.api;
 
-import de.sivgin.coding_challenge.domain.TrainingEntity;
+import de.sivgin.coding_challenge.jpa.Training;
 import de.sivgin.coding_challenge.training.api.io.PageableTrainingsResource;
 import de.sivgin.coding_challenge.training.api.service.TrainingsFinderService;
 import lombok.RequiredArgsConstructor;
@@ -52,16 +52,15 @@ public class TrainingsController {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         // service call
-        Page<TrainingEntity> trainings;
+        Page<Training> trainings;
         if (beginDate.isPresent() && endDate.isPresent() && !endDate.get().isBefore(beginDate.get())) {
-            trainings = trainingsFinderService.findAllTrainingsWithTime(pageRequest, beginDate.get(), endDate.get());
+            trainings = trainingsFinderService.findAllTrainingsWithTime(pageRequest, beginDate.get(), endDate.get(), includeAppointments);
         } else {
-            trainings = trainingsFinderService.findAllTrainings(pageRequest);
+            trainings = trainingsFinderService.findAllTrainings(pageRequest, includeAppointments);
         }
 
         // prepare response
-        return ResponseEntity.ok(TrainingsMapper.from(trainings, includeAppointments));
+        return ResponseEntity.ok(TrainingsMapper.from(trainings));
     }
-
 
 }

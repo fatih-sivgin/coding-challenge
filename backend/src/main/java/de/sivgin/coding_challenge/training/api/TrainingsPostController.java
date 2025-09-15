@@ -5,7 +5,7 @@
  */
 package de.sivgin.coding_challenge.training.api;
 
-import de.sivgin.coding_challenge.domain.TrainingEntity;
+import de.sivgin.coding_challenge.jpa.Training;
 import de.sivgin.coding_challenge.training.api.io.CreateTraining;
 import de.sivgin.coding_challenge.training.api.io.TrainingResource;
 import de.sivgin.coding_challenge.training.api.service.TrainingsCreationService;
@@ -32,9 +32,9 @@ public class TrainingsPostController {
 
     @PostMapping("/api/v1/trainings")
     public ResponseEntity<TrainingResource> postTraining(@Valid @RequestBody CreateTraining createTraining) {
-        TrainingEntity training = trainingsCreationService.createTraining(createTraining);
+        Training training = trainingsCreationService.createTraining(createTraining);
         URI location = URI.create("/api/v1/trainings/" + training.getId()); // Note: this resource is not yet defined
-        TrainingResource body = TrainingsMapper.from(training, false);
+        TrainingResource body = TrainingsMapper.from(training);
         return ResponseEntity.created(location).body(body);
     }
 }

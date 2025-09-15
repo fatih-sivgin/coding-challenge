@@ -1,6 +1,6 @@
 package de.sivgin.coding_challenge.training.api;
 
-import de.sivgin.coding_challenge.domain.TrainingEntity;
+import de.sivgin.coding_challenge.jpa.Training;
 import de.sivgin.coding_challenge.training.api.io.CreateTraining;
 import de.sivgin.coding_challenge.training.api.service.TrainingsCreationService;
 import jakarta.json.Json;
@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,7 +38,6 @@ class TrainingsPostControllerTest {
 
     @Test
     void shouldSaveTraining() throws Exception {
-
         // given
         String body = Json.createObjectBuilder()
                 .add("description", "Java Design Patterns")
@@ -47,12 +47,12 @@ class TrainingsPostControllerTest {
                 .toString();
 
         UUID mockId = UUID.randomUUID();
-        TrainingEntity mock = TrainingEntity.builder()
-                .id(mockId)
-                .speaker("\"Dr. Chuck Norris\"")
-                .price(49.50f)
-                .description("Java Design Patterns").build();
-        when(trainingsCreationService.createTraining(any(CreateTraining.class))).thenReturn(mock);
+        Training mockTraining = mock(Training.class);
+        when(mockTraining.getDescription()).thenReturn("Java Design Patterns");
+        when(mockTraining.getPrice()).thenReturn(49.5f);
+        when(mockTraining.getSpeaker()).thenReturn("Dr. Chuck Norris");
+        when(mockTraining.getId()).thenReturn(mockId);
+        when(trainingsCreationService.createTraining(any(CreateTraining.class))).thenReturn(mockTraining);
 
         // test and then
         mockMvc.perform(post("/api/v1/trainings")
@@ -68,7 +68,6 @@ class TrainingsPostControllerTest {
 
     @Test
     void shouldNotSaveTraining() throws Exception {
-
         // given
         String body = Json.createObjectBuilder()
                 .add("description", "Java Design Patterns")
