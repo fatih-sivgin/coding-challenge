@@ -1,13 +1,13 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
-package de.sivgin.coding_challenge.training.api.service;
+package de.sivgin.coding_challenge.trainings.api.service;
 
 import de.sivgin.coding_challenge.jpa.Training;
 import de.sivgin.coding_challenge.jpa.TrainingRepository;
-import de.sivgin.coding_challenge.training.api.io.CreateTraining;
+import de.sivgin.coding_challenge.trainings.api.io.CreateTraining;
+import de.sivgin.coding_challenge.trainings.api.io.TrainingResource;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class TrainingsCreationService {
     
     private final TrainingRepository repository;
@@ -30,12 +31,9 @@ public class TrainingsCreationService {
      * @param createTraining the training to store
      * @return a new instance of a {@link Training}
      */
-    @Transactional
-    public Training createTraining(CreateTraining createTraining) {
-
+    public TrainingResource createTraining(CreateTraining createTraining) {
         Training training = new Training(createTraining.description(), createTraining.price(), createTraining.speaker());
-
-        return repository.save(training);
+        return TrainingsMapper.from(training, false);
     }
 
 }

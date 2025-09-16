@@ -1,14 +1,12 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
-package de.sivgin.coding_challenge.training.api;
+package de.sivgin.coding_challenge.trainings.api;
 
-import de.sivgin.coding_challenge.jpa.Training;
-import de.sivgin.coding_challenge.training.api.io.CreateTraining;
-import de.sivgin.coding_challenge.training.api.io.TrainingResource;
-import de.sivgin.coding_challenge.training.api.service.TrainingsCreationService;
+import de.sivgin.coding_challenge.trainings.api.io.CreateTraining;
+import de.sivgin.coding_challenge.trainings.api.io.TrainingResource;
+import de.sivgin.coding_challenge.trainings.api.service.TrainingsCreationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +28,14 @@ public class TrainingsPostController {
 
     private final TrainingsCreationService trainingsCreationService;
 
+    /**
+     * @param createTraining the training to create
+     * @return a created training with status code 201
+     */
     @PostMapping("/api/v1/trainings")
     public ResponseEntity<TrainingResource> postTraining(@Valid @RequestBody CreateTraining createTraining) {
-        Training training = trainingsCreationService.createTraining(createTraining);
-        URI location = URI.create("/api/v1/trainings/" + training.getId()); // Note: this resource is not yet defined
-        TrainingResource body = TrainingsMapper.from(training);
-        return ResponseEntity.created(location).body(body);
+        TrainingResource training = trainingsCreationService.createTraining(createTraining);
+        URI location = URI.create("/api/v1/trainings/" + training.id()); // Note: this resource is not yet defined
+        return ResponseEntity.created(location).body(training);
     }
 }

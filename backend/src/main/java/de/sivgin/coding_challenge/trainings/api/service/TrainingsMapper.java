@@ -1,18 +1,18 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
-package de.sivgin.coding_challenge.training.api;
+package de.sivgin.coding_challenge.trainings.api.service;
 
 import de.sivgin.coding_challenge.jpa.Appointment;
 import de.sivgin.coding_challenge.jpa.Training;
-import de.sivgin.coding_challenge.training.api.io.AppointmentResource;
-import de.sivgin.coding_challenge.training.api.io.PageableTrainingsResource;
-import de.sivgin.coding_challenge.training.api.io.TrainingResource;
+import de.sivgin.coding_challenge.trainings.api.io.AppointmentResource;
+import de.sivgin.coding_challenge.trainings.api.io.PageableTrainingsResource;
+import de.sivgin.coding_challenge.trainings.api.io.TrainingResource;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,20 +20,23 @@ import java.util.List;
  * @since 14/09/2025
  */
 @UtilityClass
-public class TrainingsMapper {
+class TrainingsMapper {
 
     // some mappers to prepare response
-    static PageableTrainingsResource from(Page<Training> trainings) {
+    static PageableTrainingsResource from(Page<Training> trainings, boolean includeAppointments) {
         List<TrainingResource> trainingsResource = trainings.getContent().stream()
-                .map(TrainingsMapper::from)
+                .map(t -> from(t, includeAppointments))
                 .toList();
         return new PageableTrainingsResource(trainings.getTotalElements(), trainingsResource);
     }
 
-    static TrainingResource from(Training entity) {
-        List<AppointmentResource> appointments = entity.getAppointments().stream()
+    static TrainingResource from(Training entity, boolean includeAppointments) {
+        List<AppointmentResource> appointments = Collections.emptyList();
+        if(includeAppointments){
+            appointments = entity.getAppointments().stream()
                     .map(TrainingsMapper::from)
                     .toList();
+        }
 
         return new TrainingResource(entity.getId(), entity.getDescription(), entity.getPrice(), entity.getSpeaker(), appointments);
     }

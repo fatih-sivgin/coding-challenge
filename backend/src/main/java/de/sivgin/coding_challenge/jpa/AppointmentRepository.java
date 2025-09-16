@@ -1,7 +1,6 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
 package de.sivgin.coding_challenge.jpa;
 

@@ -30,7 +30,8 @@ java -jar  ./target/*-SNAPSHOT.jar
 
 - Setup global exception handling for bad requests to match to the given api specification
 - Setup security with an authorization-service providing JWT
-
+- Set frontend url as a config in application.properties
+- Setup logging
 
 ## Links
 

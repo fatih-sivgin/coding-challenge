@@ -1,4 +1,4 @@
-package de.sivgin.coding_challenge.training.api.io;
+package de.sivgin.coding_challenge.trainings.api.io;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;

@@ -1,14 +1,13 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
-package de.sivgin.coding_challenge.training.api.io;
+package de.sivgin.coding_challenge.trainings.api.io;
 
 import java.util.List;
 
 /**
- * Representation of a list of trainings.
+ * Representation of a list of trainings (TrainingResource).
  *
  * @author fatih
  * @see TrainingResource

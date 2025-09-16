@@ -1,9 +1,9 @@
-package de.sivgin.coding_challenge.training.api.io;
+package de.sivgin.coding_challenge.trainings.api.io;
 
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Resource to create a {@link TrainingResource}
+ * An incoming resource to create a {@link TrainingResource}
  *
  * @author fatih
  * @since 14/09/2025

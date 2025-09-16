@@ -1,15 +1,12 @@
 /*
  * Project: coding-challenge
  *
- * Copyright © 2025 Vilua Healthcare GmbH
  */
-package de.sivgin.coding_challenge.training.api;
+package de.sivgin.coding_challenge.trainings.api;
 
-import de.sivgin.coding_challenge.jpa.Training;
-import de.sivgin.coding_challenge.training.api.io.PageableTrainingsResource;
-import de.sivgin.coding_challenge.training.api.service.TrainingsFinderService;
+import de.sivgin.coding_challenge.trainings.api.io.PageableTrainingsResource;
+import de.sivgin.coding_challenge.trainings.api.service.TrainingsFinderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +35,7 @@ public class TrainingsController {
      * @param beginDate           to filter over appointments if value exists, should match with endDate
      * @param endDate             to filter over appointments if value exists, should match with endDate
      * @param includeAppointments to set if appointments should be part of result
-     * @return a list of trainings
+     * @return a list of trainings with status code 200
      */
     @GetMapping("/api/v1/trainings")
     public ResponseEntity<PageableTrainingsResource> getTrainings(
@@ -52,7 +49,7 @@ public class TrainingsController {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         // service call
-        Page<Training> trainings;
+        PageableTrainingsResource trainings;
         if (beginDate.isPresent() && endDate.isPresent() && !endDate.get().isBefore(beginDate.get())) {
             trainings = trainingsFinderService.findAllTrainingsWithTime(pageRequest, beginDate.get(), endDate.get(), includeAppointments);
         } else {
@@ -60,7 +57,7 @@ public class TrainingsController {
         }
 
         // prepare response
-        return ResponseEntity.ok(TrainingsMapper.from(trainings));
+        return ResponseEntity.ok(trainings);
     }
 
 }

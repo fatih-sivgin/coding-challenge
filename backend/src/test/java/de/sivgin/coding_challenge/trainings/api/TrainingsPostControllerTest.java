@@ -1,8 +1,8 @@
-package de.sivgin.coding_challenge.training.api;
+package de.sivgin.coding_challenge.trainings.api;
 
-import de.sivgin.coding_challenge.jpa.Training;
-import de.sivgin.coding_challenge.training.api.io.CreateTraining;
-import de.sivgin.coding_challenge.training.api.service.TrainingsCreationService;
+import de.sivgin.coding_challenge.trainings.api.io.CreateTraining;
+import de.sivgin.coding_challenge.trainings.api.io.TrainingResource;
+import de.sivgin.coding_challenge.trainings.api.service.TrainingsCreationService;
 import jakarta.json.Json;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,12 +47,9 @@ class TrainingsPostControllerTest {
                 .toString();
 
         UUID mockId = UUID.randomUUID();
-        Training mockTraining = mock(Training.class);
-        when(mockTraining.getDescription()).thenReturn("Java Design Patterns");
-        when(mockTraining.getPrice()).thenReturn(49.5f);
-        when(mockTraining.getSpeaker()).thenReturn("Dr. Chuck Norris");
-        when(mockTraining.getId()).thenReturn(mockId);
-        when(trainingsCreationService.createTraining(any(CreateTraining.class))).thenReturn(mockTraining);
+        TrainingResource resource = new TrainingResource(mockId, "Java Design Patterns", 49.5f, "Dr. Chuck Norris", Collections.emptyList());
+
+        when(trainingsCreationService.createTraining(any(CreateTraining.class))).thenReturn(resource);
 
         // test and then
         mockMvc.perform(post("/api/v1/trainings")
