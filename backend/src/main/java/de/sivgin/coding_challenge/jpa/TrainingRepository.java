@@ -21,6 +21,11 @@ import java.util.UUID;
  */
 public interface TrainingRepository extends JpaRepository<Training, UUID> {
 
+    /**
+     *
+     * @param pageable for paging
+     * @return a list of training instances (with appointments)
+     */
     @Query("""
             SELECT DISTINCT t
             FROM Training t
@@ -31,8 +36,8 @@ public interface TrainingRepository extends JpaRepository<Training, UUID> {
     /**
      *
      * @param beginDate the beginDate to match
-     * @param endDate the endDate to match
-     * @param pageable for paging
+     * @param endDate   the endDate to match
+     * @param pageable  for paging
      * @return a list of training instances (without appointments)
      */
     @Query("""
@@ -47,9 +52,9 @@ public interface TrainingRepository extends JpaRepository<Training, UUID> {
     /**
      *
      * @param beginDate the beginDate to match
-     * @param endDate the endDate to match
-     * @param pageable for paging
-     * @return a list of training instances (without appointments)
+     * @param endDate   the endDate to match
+     * @param pageable  for paging
+     * @return a list of training instances (with appointments)
      */
     @Query("""
             SELECT DISTINCT t

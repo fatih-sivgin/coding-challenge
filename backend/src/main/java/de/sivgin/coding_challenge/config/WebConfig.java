@@ -17,8 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")          // alle Endpoints
-                .allowedOrigins("http://localhost:5173") // Vue Dev Server URL
+        registry.addMapping("/**")          // all Endpoints
+                .allowedOrigins("http://localhost:5173") // vue dev server ✅TODO should be configured
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

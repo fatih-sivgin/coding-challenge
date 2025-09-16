@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Mapper to build resources out from entities.
+ *
  * @author fatih
  * @since 14/09/2025
  */
@@ -32,7 +34,7 @@ class TrainingsMapper {
 
     static TrainingResource from(Training entity, boolean includeAppointments) {
         List<AppointmentResource> appointments = Collections.emptyList();
-        if(includeAppointments){
+        if (includeAppointments) {
             appointments = entity.getAppointments().stream()
                     .map(TrainingsMapper::from)
                     .toList();

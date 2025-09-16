@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class TrainingsCreationService {
-    
+
     private final TrainingRepository repository;
 
     /**
@@ -33,6 +33,7 @@ public class TrainingsCreationService {
      */
     public TrainingResource createTraining(CreateTraining createTraining) {
         Training training = new Training(createTraining.description(), createTraining.price(), createTraining.speaker());
+        repository.save(training);
         return TrainingsMapper.from(training, false);
     }
 

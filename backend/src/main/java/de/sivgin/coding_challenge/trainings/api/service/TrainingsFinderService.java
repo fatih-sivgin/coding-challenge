@@ -33,14 +33,14 @@ public class TrainingsFinderService {
         Page<Training> found;
         if (includeAppointments) {
             found = trainingRepository.findAllWithAppointments(pageRequest);
-        } else  {
+        } else {
             found = trainingRepository.findAll(pageRequest);
         }
         return TrainingsMapper.from(found, includeAppointments);
     }
 
     public PageableTrainingsResource findAllTrainingsWithTime(@Nonnull PageRequest pageRequest, @Nonnull LocalDate beginDate,
-                                                   @Nonnull LocalDate endDate, boolean includeAppointments) {
+                                                              @Nonnull LocalDate endDate, boolean includeAppointments) {
         Page<Training> found;
         if (includeAppointments) {
             found = trainingRepository.findAllBetweenDatesWithAppointments(beginDate, endDate, pageRequest);
